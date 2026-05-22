@@ -122,9 +122,14 @@ HomeScreen
 ### 4.2 Criterio de aprobación por lección
 
 - Cada lección tiene 2 preguntas en el diagnóstico
-- **≥1 correcta de 2** → lección marcada como `is_completed=1, is_locked=0`
-- **0 correctas de 2** → lección permanece `is_locked=1` (se desbloquea secuencialmente)
-- Excepción: si una lección anterior está bloqueada, las siguientes también quedan bloqueadas aunque se hayan aprobado (se respeta la secuencia)
+- **≥1 correcta de 2** → lección "candidata a desbloquearse"
+- **0 correctas de 2** → lección falla el diagnóstico
+
+**Regla de secuencia en el resultado final:**
+Se recorren las lecciones en orden (1→12). Si una lección falla el diagnóstico, ella y todas las siguientes quedan bloqueadas, incluso si lecciones posteriores fueron aprobadas. Es decir:
+
+- Si el estudiante aprueba 1, 2, 3, falla 4, aprueba 5-8: se desbloquean y completan 1, 2, 3. La lección 4 queda bloqueada. Las lecciones 5-12 quedan bloqueadas aunque se hayan aprobado.
+- Si el estudiante aprueba todo (1-12): todas las lecciones quedan desbloqueadas y completadas.
 
 ### 4.3 Selección de preguntas para el diagnóstico
 
@@ -149,7 +154,7 @@ HomeScreen
 
 ### 5.1 Trigger de desbloqueo
 
-Al completar exitosamente el quiz de una lección (pantalla de resultado del quiz):
+Al completar el quiz de una lección con **≥70% de respuestas correctas** (umbral de éxito), desde la pantalla de resultado del quiz:
 
 ```dart
 // En QuizResultScreen o LessonProvider
@@ -209,6 +214,8 @@ Las imágenes de las lecciones 1–5 ya están en `assets/images/`. No requieren
 ### 6.5 Lecciones nuevas (lecciones 6–12)
 
 Aproximadamente 55 imágenes nuevas necesarias (7 lecciones × ~8 palabras). Se descargan con el mismo script Python antes de la implementación.
+
+**Nota sobre vocabulario Ngigua:** Las palabras exactas en Ngigua para las lecciones 6–12 se extraen del archivo `Gramatica ngigua.pdf` durante la fase de implementación del seeder. El spec lista los conceptos en español; el implementador consulta el PDF para las formas Ngigua correctas antes de codificar el seeder.
 
 ---
 
