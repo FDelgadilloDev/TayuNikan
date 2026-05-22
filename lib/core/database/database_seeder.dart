@@ -188,11 +188,11 @@ class DatabaseSeeder {
     });
 
     final animales = [
-      ('kunia', 'Perro'),
-      ('kumichin', 'Gato'),
-      ('kuxijna', 'Venado'),
-      ('kunthua', 'Pájaro'),
-      ('kukapio', 'Mariposa'),
+      ('kunia',    'Perro',     'assets/images/animal_perro.jpg'),
+      ('kumichin', 'Gato',      'assets/images/animal_gato.jpg'),
+      ('kuxijna',  'Venado',    'assets/images/animal_venado.jpg'),
+      ('kunthua',  'Pájaro',    'assets/images/animal_pajaro.jpg'),
+      ('kukapio',  'Mariposa',  'assets/images/animal_mariposa.jpg'),
     ];
 
     for (final a in animales) {
@@ -201,7 +201,7 @@ class DatabaseSeeder {
         'indigenous_word': a.$1,
         'translation': a.$2,
         'audio_path': null,
-        'image_path': null,
+        'image_path': a.$3,
         'example_phrase': null,
       });
     }
