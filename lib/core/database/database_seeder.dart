@@ -26,12 +26,12 @@ class DatabaseSeeder {
     });
 
     final saludos = [
-      // (palabra ngigua, traducción, frase ejemplo)
-      ('deo', 'Saludo al encontrar a alguien', 'Deo — se dice al cruzarse con alguien en el camino'),
-      ('jian', 'Bien / Bueno', 'Jian — estoy bien'),
-      ('jaro', 'Bonito / De buen carácter', null),
-      ('chee', 'Estar alegre / Estar contento', 'Chéna — yo estoy alegre'),
-      ('juajna', 'Saludo / Mensaje', null),
+      // (palabra ngigua, traducción, imagen, frase ejemplo)
+      ('deo',    'Saludo al encontrar a alguien', 'assets/images/saludo_deo.jpg',    'Deo — se dice al cruzarse con alguien en el camino'),
+      ('jian',   'Bien / Bueno',                  'assets/images/saludo_jian.jpg',   'Jian — estoy bien'),
+      ('jaro',   'Bonito / De buen carácter',     'assets/images/saludo_jaro.jpg',   null),
+      ('chee',   'Estar alegre / Estar contento', 'assets/images/saludo_chee.jpg',   'Chéna — yo estoy alegre'),
+      ('juajna', 'Saludo / Mensaje',              'assets/images/saludo_juajna.jpg', null),
     ];
 
     for (final s in saludos) {
@@ -40,8 +40,8 @@ class DatabaseSeeder {
         'indigenous_word': s.$1,
         'translation': s.$2,
         'audio_path': null,
-        'image_path': null,
-        'example_phrase': s.$3,
+        'image_path': s.$3,
+        'example_phrase': s.$4,
       });
     }
 
@@ -87,11 +87,11 @@ class DatabaseSeeder {
     });
 
     final numeros = [
-      ('jngo', 'Uno (1)'),
-      ('yoo', 'Dos (2)'),
-      ('nii', 'Tres (3)'),
-      ('noo', 'Cuatro (4)'),
-      ('nao', 'Cinco (5)'),
+      ('jngo', 'Uno (1)',    'assets/images/numero_jngo.jpg'),
+      ('yoo',  'Dos (2)',    'assets/images/numero_yoo.jpg'),
+      ('nii',  'Tres (3)',   'assets/images/numero_nii.jpg'),
+      ('noo',  'Cuatro (4)', 'assets/images/numero_noo.jpg'),
+      ('nao',  'Cinco (5)',  'assets/images/numero_nao.jpg'),
     ];
 
     for (final n in numeros) {
@@ -100,7 +100,7 @@ class DatabaseSeeder {
         'indigenous_word': n.$1,
         'translation': n.$2,
         'audio_path': null,
-        'image_path': null,
+        'image_path': n.$3,
         'example_phrase': null,
       });
     }
@@ -137,11 +137,11 @@ class DatabaseSeeder {
     });
 
     final colores = [
-      ('jatse', 'Rojo / Colorado', 'ndaxra jatse — mole (lit. salsa roja)'),
-      ('yua', 'Verde / Azul', 'jnayua — chile verde'),
-      ('rua', 'Blanco / Limpio', null),
-      ('sine', 'Amarillo', null),
-      ('thie', 'Negro / Noche', null),
+      ('jatse', 'Rojo / Colorado', 'assets/images/color_jatse.jpg', 'ndaxra jatse — mole (lit. salsa roja)'),
+      ('yua',   'Verde / Azul',    'assets/images/color_yua.jpg',   'jnayua — chile verde'),
+      ('rua',   'Blanco / Limpio', 'assets/images/color_rua.jpg',   null),
+      ('sine',  'Amarillo',        'assets/images/color_sine.jpg',  null),
+      ('thie',  'Negro / Noche',   'assets/images/color_thie.jpg',  null),
     ];
 
     for (final c in colores) {
@@ -150,8 +150,8 @@ class DatabaseSeeder {
         'indigenous_word': c.$1,
         'translation': c.$2,
         'audio_path': null,
-        'image_path': null,
-        'example_phrase': c.$3,
+        'image_path': c.$3,
+        'example_phrase': c.$4,
       });
     }
 
@@ -230,11 +230,11 @@ class DatabaseSeeder {
     });
 
     final familia = [
-      ('ndudaa', 'Padre / Papá'),
-      ('jannaa', 'Madre / Mamá'),
-      ('choo', 'Hermano / Hermana'),
-      ('nichoo', 'Familia'),
-      ('junchjan', 'Anciano / Anciana (con respeto)'),
+      ('ndudaa',   'Padre / Papá',               'assets/images/familia_ndudaa.jpg'),
+      ('jannaa',   'Madre / Mamá',               'assets/images/familia_jannaa.jpg'),
+      ('choo',     'Hermano / Hermana',           'assets/images/familia_choo.jpg'),
+      ('nichoo',   'Familia',                     'assets/images/familia_nichoo.jpg'),
+      ('junchjan', 'Anciano / Anciana (respeto)', 'assets/images/familia_junchjan.jpg'),
     ];
 
     for (final f in familia) {
@@ -243,7 +243,7 @@ class DatabaseSeeder {
         'indigenous_word': f.$1,
         'translation': f.$2,
         'audio_path': null,
-        'image_path': null,
+        'image_path': f.$3,
         'example_phrase': null,
       });
     }
