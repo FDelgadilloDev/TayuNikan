@@ -550,25 +550,34 @@ class _MatchActivityState extends State<_MatchActivity> {
                 ),
               ),
             ] else ...[
-              const Spacer(),
-              Text(
-                '🎉',
-                style: const TextStyle(fontSize: 72),
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        '🎉',
+                        style: TextStyle(fontSize: 72),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Puntaje: $_score / ${_subset.length}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary),
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Volver'),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(height: 16),
-              Text(
-                'Puntaje: $_score / ${_subset.length}',
-                style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Volver'),
-              ),
-              const Spacer(),
             ],
           ],
         ),
