@@ -1,0 +1,58 @@
+name: vozvia
+description: Aplicación educativa para el aprendizaje y preservación de lenguas indígenas.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Base de datos local
+  sqflite: ^2.3.3
+  path: ^1.9.0
+
+  # Manejo de archivos y rutas
+  path_provider: ^2.1.4
+  file_picker: ^8.1.2
+
+  # Audio - reproducción
+  just_audio: ^0.9.40
+
+  # Audio - grabación
+  record: ^6.0.0
+
+  # Reconocimiento de voz
+  speech_to_text: ^7.0.0
+
+  # Manejo de estado
+  provider: ^6.1.2
+
+  # Configuraciones locales
+  shared_preferences: ^2.3.2
+
+  # Hashing para PIN de admin
+  crypto: ^3.0.3
+
+  # Iconos
+  cupertino_icons: ^1.0.8
+
+# Fija la versión de lifecycle que es compatible con file_picker 8.x (compileSdk=34)
+# La versión 2.0.34 requiere compileSdk>=36 en sus dependientes
+dependency_overrides:
+  flutter_plugin_android_lifecycle: 2.0.22
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  sqflite_common_ffi: ^2.3.3+1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/audio/
+    - assets/images/
