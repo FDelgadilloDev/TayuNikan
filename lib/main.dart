@@ -8,7 +8,7 @@ import 'providers/progress_provider.dart';
 import 'core/services/settings_service.dart';
 import 'core/database/database_seeder.dart';
 
-/// Punto de entrada principal de VozViva.
+/// Punto de entrada principal de TayuNikan.
 ///
 /// 1. Inicializa Flutter (obligatorio para operaciones async antes de runApp).
 /// 2. Carga datos de ejemplo en el primer lanzamiento.
@@ -47,7 +47,7 @@ void main() async {
           create: (_) => ProgressProvider()..loadProgress(),
         ),
       ],
-      child: const VozViva(),
+      child: const TayuNikan(),
     ),
   );
 }

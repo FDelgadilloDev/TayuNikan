@@ -1,4 +1,4 @@
-/// Rutas nombradas de la app VozViva.
+/// Rutas nombradas de la app TayuNikan.
 class AppRoutes {
   AppRoutes._();
 

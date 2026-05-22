@@ -87,7 +87,7 @@ class SettingsScreen extends StatelessWidget {
           _SectionHeader(title: 'Acerca de'),
           const ListTile(
             leading: Icon(Icons.info_outline, color: AppColors.primary),
-            title: Text('VozViva'),
+            title: Text('TayuNikan'),
             subtitle: Text('Versión 1.0.0 — Proyecto ExpoCiencias\n'
                 'Categoría: Sociales y Humanidades'),
           ),

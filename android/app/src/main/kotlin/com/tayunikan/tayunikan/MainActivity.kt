@@ -1,4 +1,4 @@
-package com.vozviapp.vozvia
+package com.tayunikan.tayunikan
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Permisos necesarios para VozViva -->
+    <!-- Permisos necesarios para TayuNikan -->
 
     <!-- Grabación de voz (pronunciación del estudiante) -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:label="VozViva"
+        android:label="TayuNikan"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">

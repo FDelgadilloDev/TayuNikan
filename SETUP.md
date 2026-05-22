@@ -1,4 +1,4 @@
-# VozViva — Guía de configuración y ejecución
+# TayuNikan — Guía de configuración y ejecución
 
 ## ¿Qué es esto?
 Aplicación Android educativa para aprender y preservar lenguas indígenas.
@@ -29,7 +29,7 @@ Abre una terminal **en esta carpeta** y ejecuta:
 
 ```powershell
 # Crear el proyecto Flutter (genera los archivos base de Android/iOS)
-flutter create . --project-name vozvia --org com.vozviapp --platforms android
+flutter create . --project-name tayunikan --org com.tayunikanpp --platforms android
 
 # Instalar dependencias
 flutter pub get
@@ -178,6 +178,6 @@ o representantes de la comunidad antes de presentarlo como material oficial.
 
 ---
 
-*VozViva — Proyecto ExpoCiencias 2026*
+*TayuNikan — Proyecto ExpoCiencias 2026*
 *Área: Sociales y Humanidades*
 *Nota: Contenido validado por [NOMBRE_DE_LA_COMUNIDAD]*

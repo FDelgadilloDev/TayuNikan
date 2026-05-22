@@ -4,7 +4,7 @@ import 'package:path/path.dart';
 /// Clase singleton que gestiona la base de datos SQLite local.
 /// Todas las lecciones, palabras, progreso y grabaciones se guardan aquí.
 class DatabaseHelper {
-  static const String _databaseName = 'vozvia.db';
+  static const String _databaseName = 'tayunikan.db';
   static const int _databaseVersion = 1;
 
   // Singleton

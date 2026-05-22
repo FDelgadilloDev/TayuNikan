@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Paleta de colores de VozViva — Ngigua de San Marcos Tlacoyalco.
+/// Paleta de colores de TayuNikan — Ngigua de San Marcos Tlacoyalco.
 /// Extraída del logotipo oficial: terracota cobre, verde olivo y magenta vivo.
 class AppColors {
   AppColors._();

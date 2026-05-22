@@ -43,7 +43,7 @@ class WelcomeScreen extends StatelessWidget {
 
                 // Nombre de la app
                 const Text(
-                  'VozViva',
+                  'TayuNikan',
                   style: TextStyle(
                     fontSize: 52,
                     fontWeight: FontWeight.bold,

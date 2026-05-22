@@ -15,15 +15,15 @@ import 'screens/admin/create_lesson_screen.dart';
 import 'screens/admin/add_word_screen.dart';
 import 'screens/settings/settings_screen.dart';
 
-/// Punto de entrada del MaterialApp de VozViva.
+/// Punto de entrada del MaterialApp de TayuNikan.
 /// Define el tema, rutas nombradas y la ruta inicial.
-class VozViva extends StatelessWidget {
-  const VozViva({super.key});
+class TayuNikan extends StatelessWidget {
+  const TayuNikan({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'VozViva',
+      title: 'TayuNikan',
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.welcome,
