@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 /// Todas las lecciones, palabras, progreso y grabaciones se guardan aquí.
 class DatabaseHelper {
   static const String _databaseName = 'tayunikan.db';
-  static const int _databaseVersion = 1;
+  static const int _databaseVersion = 2;
 
   // Singleton
   static DatabaseHelper? _instance;
@@ -32,6 +32,7 @@ class DatabaseHelper {
       path,
       version: _databaseVersion,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
       onConfigure: (db) async {
         // Habilitar claves foráneas en SQLite
         await db.execute('PRAGMA foreign_keys = ON');
@@ -50,7 +51,10 @@ class DatabaseHelper {
         category    TEXT    NOT NULL,
         difficulty  INTEGER NOT NULL DEFAULT 1,
         created_at  TEXT    NOT NULL,
-        is_example  INTEGER NOT NULL DEFAULT 0
+        is_example  INTEGER NOT NULL DEFAULT 0,
+        order_index INTEGER NOT NULL DEFAULT 0,
+        is_locked   INTEGER NOT NULL DEFAULT 1,
+        is_completed INTEGER NOT NULL DEFAULT 0
       )
     ''');
 
@@ -108,6 +112,23 @@ class DatabaseHelper {
         FOREIGN KEY (word_id) REFERENCES words (id) ON DELETE CASCADE
       )
     ''');
+  }
+
+  /// Migración de esquema entre versiones.
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(
+          'ALTER TABLE lessons ADD COLUMN order_index  INTEGER NOT NULL DEFAULT 0');
+      await db.execute(
+          'ALTER TABLE lessons ADD COLUMN is_locked    INTEGER NOT NULL DEFAULT 1');
+      await db.execute(
+          'ALTER TABLE lessons ADD COLUMN is_completed INTEGER NOT NULL DEFAULT 0');
+      // Asignar order_index según id para lecciones existentes
+      await db.execute('UPDATE lessons SET order_index = id');
+      // Desbloquear la primera lección (id=1 → order_index=1)
+      await db.execute(
+          'UPDATE lessons SET is_locked=0 WHERE order_index=1');
+    }
   }
 
   // ──────────────────────────────────────────────

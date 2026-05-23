@@ -29,13 +29,21 @@ class LessonProvider extends ChangeNotifier {
   Future<void> loadLessons() async {
     _setLoading(true);
     try {
-      _lessons = await _lessonRepo.getAllLessons();
+      _lessons = await _lessonRepo.getLessonsOrdered();
       _error = null;
     } catch (e) {
       _error = e.toString();
     } finally {
       _setLoading(false);
     }
+  }
+
+  /// Marca la lección como completada y desbloquea la siguiente.
+  /// Se llama desde QuizScreen cuando el estudiante pasa con ≥70%.
+  Future<void> completeLesson(int lessonId, int orderIndex) async {
+    await _lessonRepo.markCompleted(lessonId);
+    await _lessonRepo.unlockNext(orderIndex + 1);
+    await loadLessons();
   }
 
   Future<int> addLesson(Lesson lesson) async {

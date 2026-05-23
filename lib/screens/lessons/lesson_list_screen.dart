@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_routes.dart';
 import '../../core/models/lesson.dart';
@@ -18,13 +19,34 @@ class LessonListScreen extends StatefulWidget {
 }
 
 class _LessonListScreenState extends State<LessonListScreen> {
+  bool _diagnosticCompleted = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<LessonProvider>().loadLessons();
       context.read<ProgressProvider>().loadProgress();
+      _checkDiagnostic();
     });
+  }
+
+  Future<void> _checkDiagnostic() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        _diagnosticCompleted = prefs.getBool('diagnosticCompleted') ?? false;
+      });
+    }
+  }
+
+  Future<void> _openDiagnostic() async {
+    await Navigator.pushNamed(context, AppRoutes.diagnosticExam);
+    // Recargar lecciones y estado del diagnóstico al regresar
+    if (mounted) {
+      context.read<LessonProvider>().loadLessons();
+      await _checkDiagnostic();
+    }
   }
 
   @override
@@ -37,6 +59,13 @@ class _LessonListScreenState extends State<LessonListScreen> {
       appBar: AppBar(
         title: const Text('Lecciones'),
         actions: [
+          // Botón de diagnóstico (visible si no se ha completado)
+          if (!_diagnosticCompleted)
+            IconButton(
+              icon: const Icon(Icons.quiz_outlined),
+              tooltip: 'Diagnóstico de nivel',
+              onPressed: _openDiagnostic,
+            ),
           // Acceso al modo admin desde el ícono de configuración
           IconButton(
             icon: Icon(auth.isAdminMode

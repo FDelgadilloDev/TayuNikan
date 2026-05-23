@@ -9,6 +9,9 @@ class Lesson {
   final int difficulty; // 1=Fácil, 2=Medio, 3=Difícil
   final String createdAt;
   final bool isExample; // true si es contenido de demostración
+  final int orderIndex;  // Posición en la secuencia A1 (1–12)
+  final bool isLocked;   // true = bloqueada, false = accesible
+  final bool isCompleted; // true = quiz completado con ≥70%
 
   const Lesson({
     this.id,
@@ -18,6 +21,9 @@ class Lesson {
     this.difficulty = 1,
     required this.createdAt,
     this.isExample = false,
+    this.orderIndex = 0,
+    this.isLocked = true,
+    this.isCompleted = false,
   });
 
   /// Crea un Lesson desde un mapa de SQLite.
@@ -29,6 +35,9 @@ class Lesson {
         difficulty: map['difficulty'] as int? ?? 1,
         createdAt: map['created_at'] as String? ?? '',
         isExample: (map['is_example'] as int? ?? 0) == 1,
+        orderIndex: map['order_index'] as int? ?? 0,
+        isLocked: (map['is_locked'] as int? ?? 1) == 1,
+        isCompleted: (map['is_completed'] as int? ?? 0) == 1,
       );
 
   /// Convierte a mapa para insertar/actualizar en SQLite.
@@ -40,6 +49,9 @@ class Lesson {
         'difficulty': difficulty,
         'created_at': createdAt,
         'is_example': isExample ? 1 : 0,
+        'order_index': orderIndex,
+        'is_locked': isLocked ? 1 : 0,
+        'is_completed': isCompleted ? 1 : 0,
       };
 
   Lesson copyWith({
@@ -50,6 +62,9 @@ class Lesson {
     int? difficulty,
     String? createdAt,
     bool? isExample,
+    int? orderIndex,
+    bool? isLocked,
+    bool? isCompleted,
   }) =>
       Lesson(
         id: id ?? this.id,
@@ -59,6 +74,9 @@ class Lesson {
         difficulty: difficulty ?? this.difficulty,
         createdAt: createdAt ?? this.createdAt,
         isExample: isExample ?? this.isExample,
+        orderIndex: orderIndex ?? this.orderIndex,
+        isLocked: isLocked ?? this.isLocked,
+        isCompleted: isCompleted ?? this.isCompleted,
       );
 
   String get difficultyLabel {

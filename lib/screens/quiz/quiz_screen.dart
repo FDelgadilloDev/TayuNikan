@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_routes.dart';
 import '../../core/models/quiz_question.dart';
+import '../../core/models/word.dart';
 import '../../providers/lesson_provider.dart';
 import '../../providers/progress_provider.dart';
 
@@ -24,7 +25,23 @@ class _QuizScreenState extends State<QuizScreen> {
   List<QuizQuestion> get _questions =>
       context.read<LessonProvider>().currentQuestions;
 
+  List<Word> get _words => context.read<LessonProvider>().currentWords;
+
   QuizQuestion get _current => _questions[_currentIndex];
+
+  /// Busca una imagen asociada a la pregunta actual cotejando
+  /// palabras Ngigua y traducciones con el texto de la pregunta.
+  String? _imageForQuestion(QuizQuestion q) {
+    final qLower = q.question.toLowerCase();
+    for (final word in _words) {
+      final ngiguaLower = word.indigenousWord.toLowerCase();
+      final transLower = word.translation.toLowerCase();
+      if (qLower.contains(ngiguaLower) || qLower.contains(transLower)) {
+        return word.imagePath;
+      }
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +56,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
     final total = questions.length;
     final progress = (_currentIndex + 1) / total;
+    final imagePath = _imageForQuestion(_current);
 
     return Scaffold(
       appBar: AppBar(
@@ -52,12 +70,27 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
+            // Imagen de la palabra si existe
+            if (imagePath != null && imagePath.isNotEmpty)
+              Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    imagePath,
+                    height: 160,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                  ),
+                ),
+              ),
+            if (imagePath != null && imagePath.isNotEmpty)
+              const SizedBox(height: 16),
             // Pregunta
             Text(
               _current.question,
@@ -73,7 +106,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   answered: _answered,
                   onTap: _answered ? null : () => _selectOption(opt),
                 )),
-            const Spacer(),
+            const SizedBox(height: 16),
             // Botón siguiente / finalizar
             if (_answered)
               SizedBox(
@@ -109,12 +142,33 @@ class _QuizScreenState extends State<QuizScreen> {
         _answered = false;
       });
     } else {
-      // Fin del quiz
-      final scorePercent = ((_score / total) * 100).round();
+      _finishQuiz(total);
+    }
+  }
+
+  Future<void> _finishQuiz(int total) async {
+    final scorePercent = ((_score / total) * 100).round();
+    final passed = _score / total >= 0.7;
+
+    // Registrar progreso en user_progress
+    if (mounted) {
       context
           .read<ProgressProvider>()
           .markLessonCompleted(widget.lessonId, quizScore: scorePercent);
+    }
 
+    // Si pasó ≥70%, desbloquear siguiente lección
+    if (passed && mounted) {
+      final lessons = context.read<LessonProvider>().lessons;
+      final lesson = lessons.where((l) => l.id == widget.lessonId).firstOrNull;
+      if (lesson != null) {
+        await context
+            .read<LessonProvider>()
+            .completeLesson(widget.lessonId, lesson.orderIndex);
+      }
+    }
+
+    if (mounted) {
       Navigator.pushReplacementNamed(
         context,
         AppRoutes.quizResult,

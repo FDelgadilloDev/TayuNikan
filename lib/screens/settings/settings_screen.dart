@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_routes.dart';
 import '../../providers/auth_provider.dart';
@@ -84,6 +85,21 @@ class SettingsScreen extends StatelessWidget {
           ),
 
           const Divider(),
+          _SectionHeader(title: 'Diagnóstico'),
+          ListTile(
+            leading: const CircleAvatar(
+              backgroundColor: Color(0x1A5F7A35),
+              child: Icon(Icons.quiz_outlined, color: AppColors.secondary),
+            ),
+            title: const Text('Reiniciar diagnóstico de nivel'),
+            subtitle: const Text(
+              'Repite el examen de diagnóstico para actualizar tu nivel.',
+            ),
+            trailing: const Icon(Icons.chevron_right_rounded),
+            onTap: () => _confirmResetDiagnostic(context),
+          ),
+
+          const Divider(),
           _SectionHeader(title: 'Acerca de'),
           const ListTile(
             leading: Icon(Icons.info_outline, color: AppColors.primary),
@@ -103,6 +119,41 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _confirmResetDiagnostic(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Reiniciar diagnóstico'),
+        content: const Text(
+          '¿Deseas reiniciar el diagnóstico de nivel? '
+          'El estado de tus lecciones no cambiará hasta que completes el examen de nuevo.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Reiniciar'),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('diagnosticCompleted', false);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Diagnóstico reiniciado. Puedes hacerlo desde Lecciones.'),
+            backgroundColor: AppColors.secondary,
+          ),
+        );
+      }
+    }
   }
 
   void _showPremiumDialog(BuildContext context, AuthProvider auth) {

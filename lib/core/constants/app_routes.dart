@@ -17,4 +17,6 @@ class AppRoutes {
   static const String addWord = '/add-word';
   static const String editWord = '/edit-word';
   static const String settings = '/settings';
+  static const String diagnosticExam    = '/diagnostic-exam';
+  static const String diagnosticResult  = '/diagnostic-result';
 }

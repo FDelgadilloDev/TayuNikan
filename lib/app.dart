@@ -14,6 +14,8 @@ import 'screens/admin/admin_panel_screen.dart';
 import 'screens/admin/create_lesson_screen.dart';
 import 'screens/admin/add_word_screen.dart';
 import 'screens/settings/settings_screen.dart';
+import 'screens/diagnostic/diagnostic_exam_screen.dart';
+import 'screens/diagnostic/diagnostic_result_screen.dart';
 
 /// Punto de entrada del MaterialApp de TayuNikan.
 /// Define el tema, rutas nombradas y la ruta inicial.
@@ -87,6 +89,21 @@ class TayuNikan extends StatelessWidget {
               builder: (_) => AddWordScreen(
                 lessonId: args['lessonId'] as int,
                 wordToEdit: args['word'] as Word,
+              ),
+            );
+
+          case AppRoutes.diagnosticExam:
+            return MaterialPageRoute(
+              builder: (_) => const DiagnosticExamScreen(),
+            );
+
+          case AppRoutes.diagnosticResult:
+            final args = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (_) => DiagnosticResultScreen(
+                results: (args['results'] as Map).cast<int, bool>(),
+                lessonTitles:
+                    (args['lessonTitles'] as Map).cast<int, String>(),
               ),
             );
 

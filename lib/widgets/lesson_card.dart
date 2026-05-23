@@ -9,7 +9,7 @@ class LessonCard extends StatelessWidget {
   final Lesson lesson;
   final UserProgress? progress;
   final int wordCount;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   final bool isAdminMode;
@@ -27,73 +27,97 @@ class LessonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final completed = progress?.completed ?? false;
+    final locked = lesson.isLocked;
+    // Completada si el modelo lo dice O si el progreso lo dice
+    final completed = lesson.isCompleted || (progress?.completed ?? false);
     final completionValue = _calculateCompletion();
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Fila superior: categoría, nivel y opciones admin
-              Row(
-                children: [
-                  _CategoryChip(category: lesson.category),
-                  const SizedBox(width: 8),
-                  DifficultyIndicator(difficulty: lesson.difficulty),
-                  const Spacer(),
-                  if (completed)
-                    const Icon(Icons.check_circle,
-                        color: AppColors.secondary, size: 20),
-                  if (isAdminMode) ...[
-                    const SizedBox(width: 4),
-                    _AdminMenu(onEdit: onEdit, onDelete: onDelete),
+    return Opacity(
+      opacity: locked ? 0.55 : 1.0,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: completed
+              ? const BorderSide(color: AppColors.secondary, width: 1.5)
+              : BorderSide.none,
+        ),
+        child: InkWell(
+          onTap: locked ? null : onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Fila superior: categoría, nivel y opciones admin
+                Row(
+                  children: [
+                    _CategoryChip(category: lesson.category),
+                    const SizedBox(width: 8),
+                    DifficultyIndicator(difficulty: lesson.difficulty),
+                    const Spacer(),
+                    if (locked)
+                      const Icon(Icons.lock_rounded,
+                          color: AppColors.textSecondary, size: 20)
+                    else if (completed)
+                      const Icon(Icons.check_circle,
+                          color: AppColors.secondary, size: 20),
+                    if (isAdminMode) ...[
+                      const SizedBox(width: 4),
+                      _AdminMenu(onEdit: onEdit, onDelete: onDelete),
+                    ],
                   ],
-                ],
-              ),
-              const SizedBox(height: 10),
-              // Título de la lección
-              Text(
-                lesson.title,
-                style: Theme.of(context).textTheme.titleMedium,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '$wordCount ${wordCount == 1 ? "palabra" : "palabras"}',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              if (lesson.isExample) ...[
-                const SizedBox(height: 4),
-                Text(
-                  '⚠ Contenido de demo — requiere validación por hablante nativo',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 11,
-                        color: AppColors.accent,
-                        fontStyle: FontStyle.italic,
-                      ),
                 ),
-              ],
-              const SizedBox(height: 10),
-              // Barra de progreso
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: completionValue,
-                  minHeight: 6,
-                  backgroundColor: AppColors.lightGray,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    completed ? AppColors.secondary : AppColors.primary,
+                const SizedBox(height: 10),
+                // Título de la lección
+                Text(
+                  lesson.title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                if (locked)
+                  Text(
+                    'Completa la lección anterior para desbloquear',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                          fontStyle: FontStyle.italic,
+                        ),
+                  )
+                else
+                  Text(
+                    '$wordCount ${wordCount == 1 ? "palabra" : "palabras"}',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                if (!locked && lesson.isExample) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    '⚠ Contenido de demo — requiere validación por hablante nativo',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: 11,
+                          color: AppColors.accent,
+                          fontStyle: FontStyle.italic,
+                        ),
+                  ),
+                ],
+                const SizedBox(height: 10),
+                // Barra de progreso
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: locked ? 0.0 : completionValue,
+                    minHeight: 6,
+                    backgroundColor: AppColors.lightGray,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      completed ? AppColors.secondary : AppColors.primary,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
