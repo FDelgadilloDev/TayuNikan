@@ -40,3 +40,21 @@ app.*.map.json
 # Local properties (SDK paths — machine specific)
 android/local.properties
 build/reports
+
+# iOS — CocoaPods (generado en Mac al hacer pod install)
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+# iOS — Archivos de build
+/ios/build/
+ios/*.lock
