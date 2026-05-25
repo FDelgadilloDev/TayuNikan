@@ -40,7 +40,7 @@ class WordDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             AudioPlayerWidget(
-              audioPath: word.audioPath,
+              assetPath: word.audioPath,
               wordLabel: word.indigenousWord,
             ),
 

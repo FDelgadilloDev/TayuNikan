@@ -7,6 +7,7 @@ import 'providers/lesson_provider.dart';
 import 'providers/progress_provider.dart';
 import 'core/services/settings_service.dart';
 import 'core/database/database_seeder.dart';
+import 'core/database/database_helper.dart';
 
 /// Punto de entrada principal de TayuNikan.
 ///
@@ -24,9 +25,11 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // Seed de datos de ejemplo en el primer lanzamiento
+  // Seed de datos: en primer lanzamiento O si la migración v3 borró el contenido
   final settings = SettingsService();
-  if (await settings.isFirstLaunch) {
+  final db = DatabaseHelper.instance;
+  final lessons = await db.queryAll('lessons');
+  if (await settings.isFirstLaunch || lessons.isEmpty) {
     await DatabaseSeeder.seed();
     await settings.setFirstLaunchComplete();
   }

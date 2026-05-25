@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 /// Todas las lecciones, palabras, progreso y grabaciones se guardan aquí.
 class DatabaseHelper {
   static const String _databaseName = 'tayunikan.db';
-  static const int _databaseVersion = 2;
+  static const int _databaseVersion = 3;
 
   // Singleton
   static DatabaseHelper? _instance;
@@ -123,11 +123,18 @@ class DatabaseHelper {
           'ALTER TABLE lessons ADD COLUMN is_locked    INTEGER NOT NULL DEFAULT 1');
       await db.execute(
           'ALTER TABLE lessons ADD COLUMN is_completed INTEGER NOT NULL DEFAULT 0');
-      // Asignar order_index según id para lecciones existentes
       await db.execute('UPDATE lessons SET order_index = id');
-      // Desbloquear la primera lección (id=1 → order_index=1)
       await db.execute(
           'UPDATE lessons SET is_locked=0 WHERE order_index=1');
+    }
+    if (oldVersion < 3) {
+      // v3: Limpiar contenido para re-seed con audio_path y preguntas nuevas.
+      // El progreso del usuario se pierde pero el contenido queda actualizado.
+      await db.execute('DELETE FROM quiz_questions');
+      await db.execute('DELETE FROM user_progress');
+      await db.execute('DELETE FROM pronunciation_attempts');
+      await db.execute('DELETE FROM words');
+      await db.execute('DELETE FROM lessons');
     }
   }
 
