@@ -68,3 +68,4 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Tamaño del IPA:" >> $GITHUB_STEP_SUMMARY
           ls -lh build/ios/iphoneos/TayuNikan-unsigned.ipa >> $GITHUB_STEP_SUMMARY
+# Build: Mon May 25 13:33:11 HMM 2026
