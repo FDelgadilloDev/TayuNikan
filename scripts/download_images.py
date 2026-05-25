@@ -1,15 +1,17 @@
 """
-TayuNikan — Descarga de imágenes acuarela del MET Open Access API.
-Descarga ~53 imágenes para las lecciones 6-12.
+TayuNikan — Descarga de imagenes del MET Open Access API.
+Descarga ~53 imagenes para las lecciones 6-12 con terminos mejorados.
 
 Uso:
-    python scripts/download_images.py
+    python scripts/download_images.py          # solo descarga faltantes
+    python scripts/download_images.py --force  # fuerza re-descarga de todo
 
 Requisitos:
     pip install requests
 """
 
 import os
+import sys
 import time
 import random
 import requests
@@ -18,93 +20,96 @@ BASE_DIR = os.path.join(os.path.dirname(__file__), '..', 'assets', 'images')
 MET_SEARCH = 'https://collectionapi.metmuseum.org/public/collection/v1/search'
 MET_OBJECT = 'https://collectionapi.metmuseum.org/public/collection/v1/objects/{}'
 
-# IDs ya usados en lecciones 1–5 (evitar duplicados)
+# IDs ya usados (evitar duplicados entre imagenes)
 SKIP_IDS: set[int] = set()
 
-# (filename, search_query, fallback_queries...)
+# (filename, query_principal, fallback1, fallback2, ...)
+# Sin filtro 'medium' para maximizar candidatos con imagenes reales
 IMAGES = [
-    # ── Lección 6: Cuerpo ──────────────────────────────────────────────────
-    ('cuerpo_jaa.jpg',        'head portrait',     'face watercolor'),
-    ('cuerpo_jmakon.jpg',     'eye portrait',      'eyes face'),
-    ('cuerpo_chinthjon.jpg',  'nose face',         'portrait figure'),
-    ('cuerpo_rua.jpg',        'mouth lips',        'face portrait'),
-    ('cuerpo_raa.jpg',        'hand gesture',      'hands study'),
-    ('cuerpo_ruthea.jpg',     'foot feet',         'barefoot figure'),
-    ('cuerpo_neje.jpg',       'tongue mouth',      'speech figure'),
-    ('cuerpo_thusin.jpg',     'neck figure',       'portrait neck'),
+    # ── Leccion 6: Cuerpo ──────────────────────────────────────────────────
+    ('cuerpo_jaa.jpg',        'head study figure',       'portrait face study',    'human head anatomy'),
+    ('cuerpo_jmakon.jpg',     'eye study botanical',     'eye detail portrait',    'eyes face drawing'),
+    ('cuerpo_chinthjon.jpg',  'nose anatomy figure',     'face portrait study',    'nose face sketch'),
+    ('cuerpo_rua.jpg',        'mouth lips study',        'lips face portrait',     'mouth open face'),
+    ('cuerpo_raa.jpg',        'hand study fingers',      'hands drawing sketch',   'hand gesture figure'),
+    ('cuerpo_ruthea.jpg',     'foot study anatomy',      'feet barefoot figure',   'feet walking study'),
+    ('cuerpo_neje.jpg',       'tongue mouth anatomy',    'mouth open tongue',      'speech figure'),
+    ('cuerpo_thusin.jpg',     'neck figure portrait',    'neck collar portrait',   'throat neck study'),
 
-    # ── Lección 7: Alimentos ───────────────────────────────────────────────
-    ('alimento_nio.jpg',        'bread flat',       'tortilla food'),
-    ('alimento_nua.jpg',        'corn maize',       'corn plant'),
-    ('alimento_niunthaon.jpg',  'wrapped food',     'tamale food'),
-    ('alimento_thukma.jpg',     'potato vegetable', 'root vegetables'),
-    ('alimento_thuchmoin.jpg',  'fruit basket',     'fruit still life'),
-    ('alimento_ndaxra.jpg',     'food meal',        'bowl food'),
-    ('alimento_tumi.jpg',       'coins money',      'currency coin'),
+    # ── Leccion 7: Alimentos ───────────────────────────────────────────────
+    ('alimento_nio.jpg',        'flat bread cooking',           'flatbread food',          'bread loaf'),
+    ('alimento_nua.jpg',        'corn maize plant botanical',   'corn cob botanical',      'maize ear'),
+    ('alimento_niunthaon.jpg',  'food wrapped corn husk',       'wrapped leaves food',     'corn food wrapped'),
+    ('alimento_thukma.jpg',     'potato tuber botanical',       'root vegetables soil',    'potato plant'),
+    ('alimento_thuchmoin.jpg',  'fruit still life',             'fruit basket painting',   'fruit bowl'),
+    ('alimento_ndaxra.jpg',     'meal bowl food serving',       'food bowl table',         'soup stew bowl'),
+    ('alimento_tumi.jpg',       'coin currency',                'coins pile silver',       'money coins metal'),
 
-    # ── Lección 8: Verbos ─────────────────────────────────────────────────
-    ('verbo_nichma.jpg',    'speech talking',    'conversation figure'),
-    ('verbo_thji.jpg',      'walking figure',    'journey travel'),
-    ('verbo_thii.jpg',      'arrival coming',    'welcome figure'),
-    ('verbo_tsjee.jpg',     'looking gazing',    'observation figure'),
-    ('verbo_thjen.jpg',     'washing water',     'laundry wash'),
-    ('verbo_tsmjan.jpg',    'laughing smile',    'joyful figure'),
-    ('verbo_tsmjang.jpg',   'crying tears',      'weeping figure'),
-    ('verbo_ruchrin.jpg',   'jumping figure',    'dance leaping'),
+    # ── Leccion 8: Verbos ─────────────────────────────────────────────────
+    ('verbo_nichma.jpg',    'conversation figure talking',   'people talking speech',   'speaker talking'),
+    ('verbo_thji.jpg',      'figure walking path',           'walking person road',     'journey travel walk'),
+    ('verbo_thii.jpg',      'figure arrival welcome',        'welcome greeting arrive', 'arrival greeting'),
+    ('verbo_tsjee.jpg',     'figure observation gazing',     'person looking watching', 'gaze observation'),
+    ('verbo_thjen.jpg',     'washing water hands',           'laundry washing river',   'hands washing water'),
+    ('verbo_tsmjan.jpg',    'laughing smile happy',          'smiling joyful figure',   'happy laughter'),
+    ('verbo_tsmjang.jpg',   'crying tears sadness',          'weeping figure tears',    'sad crying sorrow'),
+    ('verbo_ruchrin.jpg',   'figure jumping leaping',        'jumping dance figure',    'leap jump athlete'),
 
-    # ── Lección 9: Casa ───────────────────────────────────────────────────
-    ('casa_nchian.jpg',   'house building',    'home dwelling'),
-    ('casa_nuxra.jpg',    'textile blanket',   'woven fabric'),
-    ('casa_xrui.jpg',     'fire flame',        'campfire hearth'),
-    ('casa_nthaa.jpg',    'tree wood',         'timber forest'),
-    ('casa_xro.jpg',      'stone rock',        'rocks pebbles'),
-    ('casa_xroon.jpg',    'paper writing',     'manuscript scroll'),
-    ('casa_nunthe.jpg',   'earth soil',        'ground landscape'),
-    ('casa_xra.jpg',      'labor work',        'worker craft'),
+    # ── Leccion 9: Casa ───────────────────────────────────────────────────
+    ('casa_nchian.jpg',   'house cottage rural',       'small house building',    'home dwelling rural'),
+    ('casa_nuxra.jpg',    'blanket textile woven',     'woven blanket fabric',    'textile weaving cloth'),
+    ('casa_xrui.jpg',     'fire flame torch',          'campfire flame burning',  'fire hearth flame'),
+    ('casa_nthaa.jpg',    'tree trunk wood',           'tree forest lumber',      'wood timber trees'),
+    ('casa_xro.jpg',      'stone rocks pebble',        'stone wall rocks',        'rock boulder'),
+    ('casa_xroon.jpg',    'paper manuscript writing',  'scroll manuscript paper', 'writing paper document'),
+    ('casa_nunthe.jpg',   'soil earth ground',         'earth field landscape',   'soil dirt ground'),
+    ('casa_xra.jpg',      'labor craft artisan',       'craftsman working tools', 'worker artisan craft'),
 
-    # ── Lección 10: Ropa ──────────────────────────────────────────────────
-    ('ropa_ruthe.jpg',         'shawl textile',       'rebozo wrap'),
-    ('ropa_xranchritmja.jpg',  'hat sombrero',        'wide brim hat'),
-    ('ropa_ruthe_jatse.jpg',   'red textile',         'red shawl'),
-    ('ropa_ruthe_thie.jpg',    'black textile',       'dark cloth'),
-    ('ropa_nuxra_rua.jpg',     'white fabric',        'linen textile'),
-    ('ropa_raa_ruthe.jpg',     'belt sash',           'woven belt'),
-    ('ropa_ruthea_nuxra.jpg',  'sandal shoe',         'footwear'),
+    # ── Leccion 10: Ropa ──────────────────────────────────────────────────
+    ('ropa_ruthe.jpg',         'woman shawl wrap',         'shawl textile woman',     'wrap rebozo cloth'),
+    ('ropa_xranchritmja.jpg',  'wide brim hat straw',      'sombrero straw hat',      'wide hat brim'),
+    ('ropa_ruthe_jatse.jpg',   'red textile fabric',       'red cloth textile',       'red shawl fabric'),
+    ('ropa_ruthe_thie.jpg',    'black cloth textile',      'dark black fabric',       'black textile cloth'),
+    ('ropa_nuxra_rua.jpg',     'white linen fabric',       'white cloth textile',     'white fabric linen'),
+    ('ropa_raa_ruthe.jpg',     'belt sash textile band',   'woven belt sash',         'sash belt fabric'),
+    ('ropa_ruthea_nuxra.jpg',  'sandal shoe leather',      'leather sandal shoe',     'footwear sandal'),
 
-    # ── Lección 11: Tiempo / campo ────────────────────────────────────────
-    ('tiempo_nchaon.jpg',  'sun landscape',    'sunrise sky'),
-    ('tiempo_chrin.jpg',   'rain storm',       'rainfall water'),
-    ('tiempo_nunthe.jpg',  'earth ground',     'soil field'),
-    ('tiempo_nthaa.jpg',   'mountain forest',  'tree hillside'),
-    ('tiempo_xro.jpg',     'rocks stone',      'boulders landscape'),
-    ('tiempo_rajna.jpg',   'village town',     'settlement houses'),
-    ('tiempo_nua.jpg',     'corn field',       'maize agriculture'),
-    ('tiempo_xrui.jpg',    'fire warmth',      'campfire night'),
+    # ── Leccion 11: Tiempo / campo ────────────────────────────────────────
+    ('tiempo_nchaon.jpg',  'sun rays landscape',      'sunrise sunlight sky',   'sunny landscape'),
+    ('tiempo_chrin.jpg',   'rain drops storm',        'rainstorm rainfall',     'rain water storm'),
+    ('tiempo_nunthe.jpg',  'earth soil field',        'soil ground earth',      'field plowed earth'),
+    ('tiempo_nthaa.jpg',   'mountain forest trees',   'forest hillside trees',  'mountain landscape'),
+    ('tiempo_xro.jpg',     'stone rock boulders',     'rocks boulders landscape','stone path rocks'),
+    ('tiempo_rajna.jpg',   'village settlement houses','small town village',    'rural village houses'),
+    ('tiempo_nua.jpg',     'corn field agriculture',  'cornfield maize crop',   'maize field rows'),
+    ('tiempo_xrui.jpg',    'fire warmth campfire',    'campfire night flame',   'fire warmth glow'),
 
-    # ── Lección 12: Frases ────────────────────────────────────────────────
-    ('frase_deo.jpg',            'greeting hello',    'handshake meeting'),
-    ('frase_jian.jpg',           'well being happy',  'contentment figure'),
-    ('frase_thji.jpg',           'travel path',       'road journey'),
-    ('frase_nthii.jpg',          'here place',        'location map'),
-    ('frase_nthia.jpg',          'distance far',      'horizon landscape'),
-    ('frase_jian_nchaon.jpg',    'morning sunrise',   'good morning dawn'),
-    ('frase_nichma_ngigua.jpg',  'indigenous language','speech conversation'),
+    # ── Leccion 12: Frases ────────────────────────────────────────────────
+    ('frase_deo.jpg',            'greeting handshake meeting',   'people greeting hello',   'handshake welcome'),
+    ('frase_jian.jpg',           'happiness joy figure',         'happy joyful person',     'contentment smile'),
+    ('frase_thji.jpg',           'walking group journey',        'people walking path',     'journey walk road'),
+    ('frase_nthii.jpg',          'here place location',          'place map location',      'location marker'),
+    ('frase_nthia.jpg',          'distance horizon far',         'horizon landscape far',   'faraway distance'),
+    ('frase_jian_nchaon.jpg',    'morning sunrise dawn',         'dawn sunrise morning',    'good morning sun'),
+    ('frase_nichma_ngigua.jpg',  'indigenous language book',     'books language learning', 'speech book text'),
 ]
 
 
 def search_met(query: str, skip: set[int]) -> int | None:
     """Busca en el MET y devuelve un objectID con imagen disponible."""
-    params = {'q': query, 'medium': 'Watercolors', 'hasImages': 'true'}
+    # Sin filtro medium para maximizar candidatos con imagenes reales
+    params = {'q': query, 'hasImages': 'true'}
     try:
         r = requests.get(MET_SEARCH, params=params, timeout=10)
         r.raise_for_status()
         ids = r.json().get('objectIDs') or []
         random.shuffle(ids)
-        for oid in ids[:30]:
+        for oid in ids[:40]:
             if oid in skip:
                 continue
             obj_r = requests.get(MET_OBJECT.format(oid), timeout=10)
-            obj_r.raise_for_status()
+            if obj_r.status_code != 200:
+                continue
             obj = obj_r.json()
             url = obj.get('primaryImageSmall') or obj.get('primaryImage')
             if url:
@@ -134,6 +139,14 @@ def download_image(oid: int, dest: str) -> bool:
 
 
 def main():
+    force = '--force' in sys.argv
+    if force:
+        print('Modo --force: eliminando imagenes existentes de L6-12...\n')
+        for entry in IMAGES:
+            dest = os.path.join(BASE_DIR, entry[0])
+            if os.path.exists(dest):
+                os.remove(dest)
+
     os.makedirs(BASE_DIR, exist_ok=True)
     used: set[int] = set(SKIP_IDS)
     ok = 0
@@ -145,7 +158,7 @@ def main():
         dest = os.path.join(BASE_DIR, filename)
 
         if os.path.exists(dest):
-            print(f'[OK] Ya existe: {filename}')
+            print(f'[skip] Ya existe: {filename}')
             ok += 1
             continue
 

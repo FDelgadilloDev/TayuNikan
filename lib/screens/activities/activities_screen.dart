@@ -154,7 +154,7 @@ class _FlashcardActivity extends StatefulWidget {
 }
 
 class _FlashcardActivityState extends State<_FlashcardActivity> {
-  late final List<Word> _shuffled;
+  late List<Word> _shuffled;
   int _index = 0;
   bool _showTranslation = false;
 
@@ -162,6 +162,14 @@ class _FlashcardActivityState extends State<_FlashcardActivity> {
   void initState() {
     super.initState();
     _shuffled = List.from(widget.words)..shuffle(Random());
+  }
+
+  void _restart() {
+    setState(() {
+      _shuffled = List.from(widget.words)..shuffle(Random());
+      _index = 0;
+      _showTranslation = false;
+    });
   }
 
   @override
@@ -229,7 +237,12 @@ class _FlashcardActivityState extends State<_FlashcardActivity> {
                       icon: const Icon(Icons.arrow_forward),
                       label: const Text('Siguiente'),
                     )
-                  else
+                  else ...[
+                    OutlinedButton.icon(
+                      onPressed: _restart,
+                      icon: const Icon(Icons.replay_rounded),
+                      label: const Text('De nuevo'),
+                    ),
                     ElevatedButton.icon(
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.check_circle),
@@ -237,6 +250,7 @@ class _FlashcardActivityState extends State<_FlashcardActivity> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.secondary),
                     ),
+                  ],
                 ],
               ),
               const SizedBox(height: 20),
@@ -321,7 +335,7 @@ class _MultipleChoiceActivity extends StatefulWidget {
 }
 
 class _MultipleChoiceActivityState extends State<_MultipleChoiceActivity> {
-  late final List<Word> _shuffled;
+  late List<Word> _shuffled;
   int _index = 0;
   int _score = 0;
   String? _selected;
@@ -343,6 +357,17 @@ class _MultipleChoiceActivityState extends State<_MultipleChoiceActivity> {
         .toList()
       ..shuffle(Random());
     _options = [correct, ...others.take(3)]..shuffle(Random());
+  }
+
+  void _restart() {
+    setState(() {
+      _shuffled = List.from(widget.words)..shuffle(Random());
+      _index = 0;
+      _score = 0;
+      _selected = null;
+      _answered = false;
+      _buildOptions();
+    });
   }
 
   @override
@@ -435,12 +460,34 @@ class _MultipleChoiceActivityState extends State<_MultipleChoiceActivity> {
         _buildOptions();
       });
     } else {
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+      // Guardar el puntaje antes de mostrar el diálogo
+      final finalScore = _score;
+      final total = _shuffled.length;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => AlertDialog(
+          title: const Text('¡Actividad completa!'),
           content: Text(
-              '¡Actividad completa! Puntaje: $_score / ${_shuffled.length}'),
-          backgroundColor: AppColors.secondary,
+            'Puntaje: $finalScore / $total\n'
+            '${finalScore == total ? '🎉 ¡Perfecto!' : finalScore >= total ~/ 2 ? '👍 ¡Bien hecho!' : '¡Sigue practicando!'}',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);   // cierra diálogo
+                Navigator.pop(context); // regresa a actividades
+              },
+              child: const Text('Volver'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(ctx);   // cierra diálogo
+                _restart();           // reinicia la actividad
+              },
+              child: const Text('Jugar de nuevo'),
+            ),
+          ],
         ),
       );
     }
@@ -458,21 +505,34 @@ class _MatchActivity extends StatefulWidget {
 }
 
 class _MatchActivityState extends State<_MatchActivity> {
-  late final List<Word> _subset;
-  final Map<String, String> _matches = {};
+  late List<Word> _subset;
+  late List<String> _leftItems;
+  late List<String> _rightItems;
+  Map<String, String> _matches = {};
   String? _selectedWord;
   int _score = 0;
   bool _done = false;
 
-  late final List<String> _leftItems;
-  late final List<String> _rightItems;
-
   @override
   void initState() {
     super.initState();
+    _initRound();
+  }
+
+  void _initRound() {
     _subset = (List<Word>.from(widget.words)..shuffle(Random())).take(4).toList();
     _leftItems = _subset.map((w) => w.indigenousWord).toList();
     _rightItems = _subset.map((w) => w.translation).toList()..shuffle(Random());
+  }
+
+  void _restart() {
+    setState(() {
+      _initRound();
+      _matches = {};
+      _selectedWord = null;
+      _score = 0;
+      _done = false;
+    });
   }
 
   void _selectLeft(String word) {
@@ -570,9 +630,20 @@ class _MatchActivityState extends State<_MatchActivity> {
                             color: AppColors.primary),
                       ),
                       const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Volver'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Volver'),
+                          ),
+                          const SizedBox(width: 16),
+                          ElevatedButton.icon(
+                            onPressed: _restart,
+                            icon: const Icon(Icons.replay_rounded),
+                            label: const Text('Jugar de nuevo'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
