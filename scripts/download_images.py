@@ -32,20 +32,23 @@ HEADERS = {'User-Agent': 'TayuNikanApp/2.0 (educational; contact@tayunikan.mx)'}
 # met_query:  busqueda en MET si Wikipedia falla
 IMAGES = [
     # ── Leccion 1: Saludos ────────────────────────────────────────────────────
+    # deo=saludo, jian=bien/bueno, jaro=bonito, chee=alegre, juajna=mensaje
     ('saludo_deo.jpg',    'Handshake',           'greeting handshake'),
-    ('saludo_jian.jpg',   'Happiness',           'happiness joy'),
-    ('saludo_jaro.jpg',   'Flower',              'flower beauty'),
-    ('saludo_chee.jpg',   'Laughter',            'laughing smile'),
-    ('saludo_juajna.jpg', 'Greeting card',       'greeting card letter'),
+    ('saludo_jian.jpg',   'Smiley',              'smiley happy face'),
+    ('saludo_jaro.jpg',   'Rose',                'rose flower beautiful'),
+    ('saludo_chee.jpg',   'Smile',               'smile laughing happy'),
+    ('saludo_juajna.jpg', 'Postcard',            'postcard letter greeting'),
 
     # ── Leccion 2: Numeros ────────────────────────────────────────────────────
-    ('numero_jngo.jpg', '1',            'number one figure'),
-    ('numero_yoo.jpg',  '2',            'number two figure'),
-    ('numero_nii.jpg',  '3',            'number three figure'),
-    ('numero_noo.jpg',  '4',            'number four figure'),
-    ('numero_nao.jpg',  '5',            'number five fingers'),
+    # numeros 1-5; usar objetos concretos (un sol, bicicleta, semaforo, trebol, estrella)
+    ('numero_jngo.jpg', 'Sun',              'sun one'),
+    ('numero_yoo.jpg',  'Bicycle',          'bicycle two wheels'),
+    ('numero_nii.jpg',  'Traffic light',    'traffic light three colors'),
+    ('numero_noo.jpg',  'Four-leaf clover', 'clover four leaves'),
+    ('numero_nao.jpg',  'Starfish',         'starfish five arms'),
 
     # ── Leccion 3: Colores ────────────────────────────────────────────────────
+    # colores: articulos Wikipedia de color tienen swatches claros
     ('color_jatse.jpg', 'Red',         'red color paint'),
     ('color_yua.jpg',   'Green',       'green color plant'),
     ('color_rua.jpg',   'White',       'white color fabric'),
@@ -53,59 +56,67 @@ IMAGES = [
     ('color_thie.jpg',  'Black',       'black color night'),
 
     # ── Leccion 4: Animales ───────────────────────────────────────────────────
-    ('animal_perro.jpg',    'Dog',        'dog canine'),
-    ('animal_gato.jpg',     'Cat',        'cat feline'),
-    ('animal_venado.jpg',   'White-tailed deer', 'deer venado'),
-    ('animal_pajaro.jpg',   'Bird',       'bird flying'),
-    ('animal_mariposa.jpg', 'Butterfly',  'butterfly insect'),
+    ('animal_perro.jpg',    'Dog',              'dog canine'),
+    ('animal_gato.jpg',     'Cat',              'cat feline'),
+    ('animal_venado.jpg',   'White-tailed deer','deer venado'),
+    ('animal_pajaro.jpg',   'Bird',             'bird flying'),
+    ('animal_mariposa.jpg', 'Butterfly',        'butterfly insect'),
 
     # ── Leccion 5: Familia ────────────────────────────────────────────────────
-    ('familia_ndudaa.jpg',   'Father',     'father family'),
-    ('familia_jannaa.jpg',   'Mother',     'mother family'),
-    ('familia_choo.jpg',     'Sibling',    'siblings children'),
-    ('familia_nichoo.jpg',   'Family',     'family together'),
-    ('familia_junchjan.jpg', 'Old age',    'elder grandparent'),
+    # padre, madre, hermano/a, familia, abuelo/a
+    ('familia_ndudaa.jpg',   'Father',      'father parent man'),
+    ('familia_jannaa.jpg',   'Mother',      'mother parent woman'),
+    ('familia_choo.jpg',     'Brother',     'brother sister children'),
+    ('familia_nichoo.jpg',   'Nuclear family', 'family parents children'),
+    ('familia_junchjan.jpg', 'Grandparent', 'grandparent elder older'),
 
     # ── Leccion 6: Cuerpo ─────────────────────────────────────────────────────
-    ('cuerpo_jaa.jpg',       'Head',       'human head portrait'),
-    ('cuerpo_jmakon.jpg',    'Eye',        'eye face'),
-    ('cuerpo_chinthjon.jpg', 'Nose',       'nose face anatomy'),
-    ('cuerpo_rua.jpg',       'Mouth',      'mouth lips'),
-    ('cuerpo_raa.jpg',       'Hand',       'hand fingers'),
-    ('cuerpo_ruthea.jpg',    'Foot',       'foot barefoot'),
-    ('cuerpo_neje.jpg',      'Tongue',     'tongue mouth'),
-    ('cuerpo_thusin.jpg',    'Neck',       'neck portrait'),
+    # partes del cuerpo: articulos de anatomia tienen fotos claras
+    ('cuerpo_jaa.jpg',       'Human head',    'head face portrait'),
+    ('cuerpo_jmakon.jpg',    'Human eye',     'eye vision face'),
+    ('cuerpo_chinthjon.jpg', 'Human nose',    'nose face anatomy'),
+    ('cuerpo_rua.jpg',       'Mouth',         'mouth lips face'),
+    ('cuerpo_raa.jpg',       'Hand',          'hand fingers palm'),
+    ('cuerpo_ruthea.jpg',    'Foot',          'foot barefoot sole'),
+    ('cuerpo_neje.jpg',      'Tongue',        'tongue mouth taste'),
+    ('cuerpo_thusin.jpg',    'Neck',          'neck throat portrait'),
 
     # ── Leccion 7: Alimentos ──────────────────────────────────────────────────
     ('alimento_nio.jpg',       'Corn tortilla',  'tortilla flatbread'),
-    ('alimento_nua.jpg',       'Maize',           'corn maize plant'),
-    ('alimento_niunthaon.jpg', 'Tamale',          'tamale food wrapped'),
-    ('alimento_thukma.jpg',    'Potato',          'potato vegetable'),
-    ('alimento_thuchmoin.jpg', 'Fruit',           'fruit bowl still life'),
-    ('alimento_ndaxra.jpg',    'Mole sauce',      'mole sauce food bowl'),
-    ('alimento_tumi.jpg',      'Coin',            'coins currency metal'),
+    ('alimento_nua.jpg',       'Maize',          'corn maize plant'),
+    ('alimento_niunthaon.jpg', 'Tamale',         'tamale food wrapped'),
+    ('alimento_thukma.jpg',    'Potato',         'potato vegetable'),
+    ('alimento_thuchmoin.jpg', 'Tropical fruit', 'fruit tropical colorful'),
+    ('alimento_ndaxra.jpg',    'Mole sauce',     'mole sauce food bowl'),
+    ('alimento_tumi.jpg',      'Coin',           'coins currency metal'),
 
     # ── Leccion 8: Verbos ─────────────────────────────────────────────────────
-    ('verbo_nichma.jpg',  'Speech',           'people talking conversation'),
-    ('verbo_thji.jpg',    'Walking',          'walking figure path'),
-    ('verbo_thii.jpg',    'Arrival',          'arrival welcome greeting'),
-    ('verbo_tsjee.jpg',   'Visual perception','person looking gazing'),
-    ('verbo_thjen.jpg',   'Hand washing',     'washing hands water'),
-    ('verbo_tsmjan.jpg',  'Laughter',         'laughing smile happy'),
+    # verbos: usar imagenes concretas (objeto/accion clara) en lugar de conceptos abstractos
+    # nichma=hablar, thji=caminar, thii=llegar, tsjee=ver, thjen=lavar manos
+    # tsmjan=reir, tsmjang=llorar, ruchrin=saltar
+    ('verbo_nichma.jpg',  'Public speaking',  'person speaking microphone talk'),
+    ('verbo_thji.jpg',    'Hiking',           'hiking trail person walking'),
+    ('verbo_thii.jpg',    'Door',             'door entrance house arrive'),
+    ('verbo_tsjee.jpg',   'Human eye',        'eye looking vision see'),
+    ('verbo_thjen.jpg',   'Hand washing',     'washing hands water soap'),
+    ('verbo_tsmjan.jpg',  'Smile',            'smile laughing happy face'),
     ('verbo_tsmjang.jpg', 'Crying',           'crying tears sadness'),
-    ('verbo_ruchrin.jpg', 'Jumping',          'jumping leaping figure'),
+    ('verbo_ruchrin.jpg', 'Long jump',        'long jump athletics jumping'),
 
     # ── Leccion 9: Casa ───────────────────────────────────────────────────────
+    # nchian=casa, nuxra=cobija, xrui=fuego, nthaa=arbol, xro=piedra
+    # xroon=papel, nunthe=tierra, xra=trabajo/labor
     ('casa_nchian.jpg',  'House',         'house rural cottage'),
     ('casa_nuxra.jpg',   'Blanket',       'blanket textile woven'),
     ('casa_xrui.jpg',    'Fire',          'fire flame campfire'),
     ('casa_nthaa.jpg',   'Tree',          'tree forest wood'),
     ('casa_xro.jpg',     'Rock (geology)','stone rocks pebble'),
-    ('casa_xroon.jpg',   'Paper',         'paper manuscript writing'),
+    ('casa_xroon.jpg',   'Paper',         'paper sheet white'),
     ('casa_nunthe.jpg',  'Soil',          'soil earth ground'),
-    ('casa_xra.jpg',     'Manual labour', 'labor work craftsman'),
+    ('casa_xra.jpg',     'Artisan',       'artisan craftsman work hands'),
 
     # ── Leccion 10: Ropa ──────────────────────────────────────────────────────
+    # ropa tradicional mexicana/ngigua
     ('ropa_ruthe.jpg',        'Rebozo',          'woman shawl rebozo'),
     ('ropa_xranchritmja.jpg', 'Sombrero',        'sombrero wide hat straw'),
     ('ropa_ruthe_jatse.jpg',  'Rebozo',          'red textile shawl'),
@@ -115,23 +126,25 @@ IMAGES = [
     ('ropa_ruthea_nuxra.jpg', 'Sandal',          'sandal leather footwear'),
 
     # ── Leccion 11: Tiempo ────────────────────────────────────────────────────
-    ('tiempo_nchaon.jpg', 'Sun',      'sun rays sunrise'),
-    ('tiempo_chrin.jpg',  'Rain',     'rain drops storm'),
-    ('tiempo_nunthe.jpg', 'Soil',     'earth soil field'),
-    ('tiempo_nthaa.jpg',  'Forest',   'forest trees mountain'),
-    ('tiempo_xro.jpg',    'Rock (geology)', 'stone boulders'),
-    ('tiempo_rajna.jpg',  'Village',  'village rural settlement'),
-    ('tiempo_nua.jpg',    'Milpa',    'corn field agriculture'),
-    ('tiempo_xrui.jpg',   'Campfire', 'campfire fire warmth'),
+    # nchaon=sol, chrin=lluvia, nunthe=tierra, nthaa=bosque/arbol
+    # xro=piedra, rajna=pueblo/lugar, nua=milpa/maiz, xrui=fogata
+    ('tiempo_nchaon.jpg', 'Sun',           'sun rays sunrise'),
+    ('tiempo_chrin.jpg',  'Rain',          'rain drops storm'),
+    ('tiempo_nunthe.jpg', 'Agriculture',   'farmland earth field'),
+    ('tiempo_nthaa.jpg',  'Forest',        'forest trees mountain'),
+    ('tiempo_xro.jpg',    'Rock (geology)','stone boulders'),
+    ('tiempo_rajna.jpg',  'Village',       'village rural settlement'),
+    ('tiempo_nua.jpg',    'Milpa',         'corn field agriculture'),
+    ('tiempo_xrui.jpg',   'Campfire',      'campfire fire warmth'),
 
     # ── Leccion 12: Frases ────────────────────────────────────────────────────
-    ('frase_deo.jpg',           'Handshake',       'greeting hello handshake'),
-    ('frase_jian.jpg',          'Happiness',       'happiness joy figure'),
-    ('frase_thji.jpg',          'Trail',           'trail path walking'),
-    ('frase_nthii.jpg',         'Map',             'map location place'),
-    ('frase_nthia.jpg',         'Horizon',         'horizon landscape far'),
-    ('frase_jian_nchaon.jpg',   'Sunrise',         'sunrise morning dawn'),
-    ('frase_nichma_ngigua.jpg', 'Mixtec languages','indigenous language book'),
+    ('frase_deo.jpg',           'Handshake',         'greeting hello handshake'),
+    ('frase_jian.jpg',          'Smiley',            'smiley happy joy face'),
+    ('frase_thji.jpg',          'Hiking',            'trail path walking person'),
+    ('frase_nthii.jpg',         'Map',               'map location place'),
+    ('frase_nthia.jpg',         'Horizon',           'horizon landscape far'),
+    ('frase_jian_nchaon.jpg',   'Sunrise',           'sunrise morning dawn'),
+    ('frase_nichma_ngigua.jpg', 'Mixtec languages',  'indigenous language book'),
 ]
 
 
