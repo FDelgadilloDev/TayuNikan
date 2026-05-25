@@ -41,7 +41,7 @@ IMAGES = [
 
     # ── Leccion 2: Numeros ────────────────────────────────────────────────────
     # numeros 1-5; usar objetos concretos (un sol, bicicleta, semaforo, trebol, estrella)
-    ('numero_jngo.jpg', 'Sun',              'sun one'),
+    ('numero_naa.jpg',  'Sun',              'sun one'),
     ('numero_yoo.jpg',  'Bicycle',          'bicycle two wheels'),
     ('numero_nii.jpg',  'Traffic light',    'traffic light three colors'),
     ('numero_noo.jpg',  'Four-leaf clover', 'clover four leaves'),
@@ -84,7 +84,7 @@ IMAGES = [
     # ── Leccion 7: Alimentos ──────────────────────────────────────────────────
     ('alimento_nio.jpg',       'Corn tortilla',  'tortilla flatbread'),
     ('alimento_nua.jpg',       'Maize',          'corn maize plant'),
-    ('alimento_niunthaon.jpg', 'Tamale',         'tamale food wrapped'),
+    ('alimento_niunthao.jpg',  'Tamale',         'tamale food wrapped'),
     ('alimento_thukma.jpg',    'Potato',         'potato vegetable'),
     ('alimento_thuchmoin.jpg', 'Tropical fruit', 'fruit tropical colorful'),
     ('alimento_ndaxra.jpg',    'Mole sauce',     'mole sauce food bowl'),

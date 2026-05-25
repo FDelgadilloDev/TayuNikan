@@ -12,6 +12,7 @@ Reglas fonologicas aplicadas:
   ts, tsj → ch  (africada → ch)
   jn, jm al inicio → silenciar j  (consonante implosiva)
   aa, ee, oo (vocales largas) → vocal simple
+  saltillo (ꞌ) → ignorar (pausa glotal, no representable en TTS)
 
 Uso:
     pip install gTTS
@@ -22,6 +23,11 @@ Uso:
 import os
 import sys
 import time
+
+# Windows consola (cp1252) no puede imprimir caracteres Ngigua como el saltillo.
+# Reconfigurar stdout a UTF-8 con reemplazo evita el crash.
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 try:
     from gtts import gTTS
@@ -36,21 +42,24 @@ os.makedirs(AUDIO_DIR, exist_ok=True)
 # La clave es exactamente la palabra que va en la base de datos.
 # El valor es la transcripcion en español que suena similar a la pronunciacion
 # real en Ngigua segun su sistema fonologico documentado.
+# IMPORTANTE: No usar tildes/acentos en los valores — gTTS enfatiza demasiado
+# la vocal acentuada, produciendo una pronunciacion artificial.
 PHONETICS = {
     # ── L1 Saludos ──────────────────────────────────────────────────────────
-    'deo':    'déo',
+    'deo':    'deo',
     'jian':   'hian',
     'jaro':   'haro',
     'chee':   'che',
     'juajna': 'juajna',
 
     # ── L2 Numeros ──────────────────────────────────────────────────────────
-    # j antes de consonante es implosiva glotal, se silencia
-    'jngo': 'ngo',
-    'yoo':  'yo',
-    'nii':  'ni',
-    'noo':  'no',
-    'nao':  'nao',
+    # naa = uno (forma principal del diccionario Ngigua)
+    # naꞌo = cinco (saltillo = pausa glotal, se omite en TTS)
+    'naa':    'naa',
+    'yoo':    'yo',
+    'nii':    'ni',
+    'noo':    'no',
+    "naꞌo":  'nao',
 
     # ── L3 Colores ──────────────────────────────────────────────────────────
     'jatse': 'hatse',
@@ -75,22 +84,22 @@ PHONETICS = {
 
     # ── L6 Cuerpo ───────────────────────────────────────────────────────────
     'jaa':       'ha',        # j→h, aa→a
-    'jmakón':    'makón',     # jm→m (j implosiva antes de m)
-    'chinthjón': 'chintón',   # th→t
+    'jmakon':    'makon',     # jm→m (j implosiva antes de m); sin tilde
+    'chinthjon': 'chinton',   # th→t; sin tilde
     'rua':       'rua',
     'raa':       'ra',        # aa→a
-    'ruthea':    'rutéa',     # th→t
-    'neje':      'nehe',      # j→h intervocálica
+    'ruthea':    'rutea',     # th→t; sin tilde
+    'neje':      'nehe',      # j→h intervocalica
     'thusin':    'tusin',     # th→t
 
     # ── L7 Alimentos ────────────────────────────────────────────────────────
-    'nio':       'nio',
-    'nua':       'nua',
-    'niunthaon': 'niuntaon',  # th→t
-    'thukma':    'tukma',     # th→t
-    'thuchmoin': 'tuchmoin',  # th→t
-    'ndaxra':    'ndara',     # x→r (fricativa en posición intervocálica)
-    'tumi':      'tumi',
+    'nio':      'nio',
+    'nua':      'nua',
+    'niunthao': 'niuntao',   # th→t (forma correcta del diccionario)
+    'thukma':   'tukma',     # th→t
+    'thuchmoin':'tuchmoin',  # th→t
+    'ndaxra':   'ndara',     # x→r (fricativa en posicion intervocalica)
+    'tumi':     'tumi',
 
     # ── L8 Verbos ───────────────────────────────────────────────────────────
     'nichma':  'nichma',
@@ -119,22 +128,17 @@ PHONETICS = {
     'ruthe thie':   'rute tie',
     'nuxra rua':    'nuchra rua',
     'raa ruthe':    'ra rute',
-    'ruthea nuxra': 'rutéa nuchra',
+    'ruthea nuxra': 'rutea nuchra',  # sin tilde
 
     # ── L11 Tiempo ──────────────────────────────────────────────────────────
     'nchaon': 'nchaon',
     'chrin':  'chrin',
-    'nunthe': 'nunte',   # th→t
-    'nthaa':  'nta',     # nth→nt
-    'xro':    'chro',
+    # 'nunthe' y 'nthaa' ya definidos arriba (L9)
     'rajna':  'rahna',   # j→h
-    'nua':    'nua',
-    'xrui':   'chrui',
+    # 'nua', 'xro', 'xrui' ya definidos arriba
 
     # ── L12 Frases ──────────────────────────────────────────────────────────
-    'deo':            'déo',
-    'jian':           'hian',
-    'thji':           'chi',
+    # 'deo', 'jian', 'thji' ya definidos arriba
     'nthii':          'nti',        # nth→nt
     'nthia':          'ntia',
     'jian nchaon':    'hian nchaon',
@@ -151,11 +155,11 @@ WORDS = [
     ('chee',   'saludo', 4),
     ('juajna', 'saludo', 5),
     # L2 Numeros
-    ('jngo', 'numero', 1),
-    ('yoo',  'numero', 2),
-    ('nii',  'numero', 3),
-    ('noo',  'numero', 4),
-    ('nao',  'numero', 5),
+    ('naa',    'numero', 1),   # forma principal del diccionario Ngigua
+    ('yoo',    'numero', 2),
+    ('nii',    'numero', 3),
+    ('noo',    'numero', 4),
+    ("naꞌo",  'numero', 5),   # cinco, con saltillo
     # L3 Colores
     ('jatse', 'color', 1),
     ('yua',   'color', 2),
@@ -176,8 +180,8 @@ WORDS = [
     ('junchjan', 'familia', 5),
     # L6 Cuerpo
     ('jaa',       'cuerpo', 1),
-    ('jmakón',    'cuerpo', 2),
-    ('chinthjón', 'cuerpo', 3),
+    ('jmakon',    'cuerpo', 2),   # sin tilde (corregido del diccionario)
+    ('chinthjon', 'cuerpo', 3),   # sin tilde (corregido del diccionario)
     ('rua',       'cuerpo', 4),
     ('raa',       'cuerpo', 5),
     ('ruthea',    'cuerpo', 6),
@@ -186,7 +190,7 @@ WORDS = [
     # L7 Alimentos
     ('nio',       'alimento', 1),
     ('nua',       'alimento', 2),
-    ('niunthaon', 'alimento', 3),
+    ('niunthao',  'alimento', 3),  # forma correcta del diccionario
     ('thukma',    'alimento', 4),
     ('thuchmoin', 'alimento', 5),
     ('ndaxra',    'alimento', 6),

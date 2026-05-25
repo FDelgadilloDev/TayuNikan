@@ -66,11 +66,11 @@ class DatabaseSeeder {
     });
 
     final numeros = [
-      ('jngo', 'Uno (1)',    'assets/images/numero_jngo.jpg', 'Jngo — uno, el primero',           'assets/audio/numero_1.mp3'),
+      ('naa', 'Uno (1)',    'assets/images/numero_naa.jpg', 'Naa — uno, el primero',           'assets/audio/numero_1.mp3'),
       ('yoo',  'Dos (2)',    'assets/images/numero_yoo.jpg',  'Yoo — dos tortillas',              'assets/audio/numero_2.mp3'),
       ('nii',  'Tres (3)',   'assets/images/numero_nii.jpg',  'Nii — tres días',                  'assets/audio/numero_3.mp3'),
       ('noo',  'Cuatro (4)', 'assets/images/numero_noo.jpg',  'Noo — cuatro pasos',               'assets/audio/numero_4.mp3'),
-      ('nao',  'Cinco (5)',  'assets/images/numero_nao.jpg',  'Nao — cinco dedos de la mano',     'assets/audio/numero_5.mp3'),
+      ('naꞌo',  'Cinco (5)',  'assets/images/numero_nao.jpg',  'Naꞌo — cinco dedos de la mano',     'assets/audio/numero_5.mp3'),
     ];
     for (final n in numeros) {
       await db.insert('words', {
@@ -91,7 +91,7 @@ class DatabaseSeeder {
       'title': 'Colores',
       'description':
           'Aprende los colores básicos en Ngigua. '
-          'En Ngigua, la palabra "nao" también significa "color" en general.',
+          'En Ngigua, la palabra "naꞌo" también significa "color" en general.',
       'category': 'Vocabulario',
       'difficulty': 2,
       'created_at': now,
@@ -214,8 +214,8 @@ class DatabaseSeeder {
 
     final cuerpo = [
       ('jaa',       'Cabeza', 'assets/images/cuerpo_jaa.jpg',       'Jaa — me duele la cabeza',                    'assets/audio/cuerpo_1.mp3'),
-      ('jmakón',    'Ojo',    'assets/images/cuerpo_jmakon.jpg',    'Jmakón — tengo los ojos cansados',            'assets/audio/cuerpo_2.mp3'),
-      ('chinthjón', 'Nariz',  'assets/images/cuerpo_chinthjon.jpg', 'Chinthjón — me duele la nariz',               'assets/audio/cuerpo_3.mp3'),
+      ('jmakon',    'Ojo',    'assets/images/cuerpo_jmakon.jpg',    'Jmakon — tengo los ojos cansados',            'assets/audio/cuerpo_2.mp3'),
+      ('chinthjon', 'Nariz',  'assets/images/cuerpo_chinthjon.jpg', 'Chinthjon — me duele la nariz',               'assets/audio/cuerpo_3.mp3'),
       ('rua',       'Boca',   'assets/images/cuerpo_rua.jpg',       'Rua — abro la boca para hablar',              'assets/audio/cuerpo_4.mp3'),
       ('raa',       'Mano',   'assets/images/cuerpo_raa.jpg',       'Raa — lavo mis manos',                        'assets/audio/cuerpo_5.mp3'),
       ('ruthea',    'Pie',    'assets/images/cuerpo_ruthea.jpg',    'Ruthea — camino con los pies',                'assets/audio/cuerpo_6.mp3'),
@@ -255,7 +255,7 @@ class DatabaseSeeder {
     final alimentos = [
       ('nio',       'Tortilla',        'assets/images/alimento_nio.jpg',       'Nio — hago tortillas en el comal',             'assets/audio/alimento_1.mp3'),
       ('nua',       'Maíz / Milpa',    'assets/images/alimento_nua.jpg',       'Nua — el maíz es nuestra vida',               'assets/audio/alimento_2.mp3'),
-      ('niunthaon', 'Tamal',           'assets/images/alimento_niunthaon.jpg', 'Niunthaon — los tamales son para la fiesta',   'assets/audio/alimento_3.mp3'),
+      ('niunthao', 'Tamal',           'assets/images/alimento_niunthao.jpg', 'Niunthao — los tamales son para la fiesta',   'assets/audio/alimento_3.mp3'),
       ('thukma',    'Papa',            'assets/images/alimento_thukma.jpg',    'Thukma — la papa crece en la milpa',           'assets/audio/alimento_4.mp3'),
       ('thuchmoin', 'Fruta',           'assets/images/alimento_thuchmoin.jpg', 'Thuchmoin — como fruta del árbol',             'assets/audio/alimento_5.mp3'),
       ('ndaxra',    'Comida / Mole',   'assets/images/alimento_ndaxra.jpg',    'Ndaxra — la comida está lista',               'assets/audio/alimento_6.mp3'),
@@ -489,7 +489,7 @@ class DatabaseSeeder {
         _q(lessonId, '"juajna" en Ngigua es:',
             'Número uno', 'Saludo / Mensaje', 'Color rojo', 'Agua', 'b'),
         _q(lessonId, '¿Cuál de estas palabras es un saludo en Ngigua?',
-            'nao', 'rua', 'deo', 'nthaa', 'c'),
+            'naꞌo', 'rua', 'deo', 'nthaa', 'c'),
         _q(lessonId, 'Si respondes "jian" cuando te preguntan cómo estás, ¿qué dices?',
             'Estoy triste', 'Estoy cansado', 'Estoy bien', 'Tengo hambre', 'c'),
         _q(lessonId, '¿Cuál NO es un saludo o expresión de bienestar en Ngigua?',
@@ -502,26 +502,26 @@ class DatabaseSeeder {
 
   static List<Map<String, dynamic>> _q2(int lessonId) => [
         _q(lessonId, '¿Cómo se dice "Uno" en Ngigua?',
-            'yoo', 'nao', 'jngo', 'nii', 'c'),
+            'yoo', 'naꞌo', 'naa', 'nii', 'c'),
         _q(lessonId, '"noo" es el número:',
             'Tres', 'Cuatro', 'Cinco', 'Dos', 'b'),
         _q(lessonId, '¿Cuál es el número 2 en Ngigua?',
-            'nii', 'jngo', 'yoo', 'nao', 'c'),
+            'nii', 'naa', 'yoo', 'naꞌo', 'c'),
         _q(lessonId, '"nii" en Ngigua significa:',
             'Uno', 'Dos', 'Tres', 'Cuatro', 'c'),
         _q(lessonId, '¿Cómo se dice "Cinco" en Ngigua?',
-            'noo', 'nao', 'jngo', 'yoo', 'b'),
-        _q(lessonId, '¿Qué número es "jngo"?',
+            'noo', 'naꞌo', 'naa', 'yoo', 'b'),
+        _q(lessonId, '¿Qué número es "naa"?',
             '2', '5', '3', '1', 'd'),
         _q(lessonId, '¿Cuál es el orden correcto de los números en Ngigua?',
-            'nao, nii, yoo, jngo, noo', 'jngo, yoo, nii, noo, nao',
-            'noo, nao, jngo, yoo, nii', 'nii, nao, jngo, yoo, noo', 'b'),
+            'naꞌo, nii, yoo, naa, noo', 'naa, yoo, nii, noo, naꞌo',
+            'noo, naꞌo, naa, yoo, nii', 'nii, naꞌo, naa, yoo, noo', 'b'),
         _q(lessonId, '"yoo" en Ngigua es el número:',
             'Uno', 'Dos', 'Cuatro', 'Cinco', 'b'),
         _q(lessonId, 'Si tienes "nii" tortillas, ¿cuántas tienes?',
             '1', '2', '3', '5', 'c'),
         _q(lessonId, '¿Cuál NO es un número en Ngigua?',
-            'jngo', 'yoo', 'deo', 'nao', 'c'),
+            'naa', 'yoo', 'deo', 'naꞌo', 'c'),
       ];
 
   static List<Map<String, dynamic>> _q3(int lessonId) => [
@@ -600,17 +600,17 @@ class DatabaseSeeder {
         _q(lessonId, '"raa" en Ngigua es:',
             'Pie', 'Cuello', 'Mano', 'Ojo', 'c'),
         _q(lessonId, '¿Cuál es la parte del cuerpo que sirve para hablar y comer?',
-            'jaa', 'jmakón', 'neje', 'thusin', 'c'),
-        _q(lessonId, '"jmakón" en Ngigua significa:',
+            'jaa', 'jmakon', 'neje', 'thusin', 'c'),
+        _q(lessonId, '"jmakon" en Ngigua significa:',
             'Nariz', 'Ojo', 'Boca', 'Oreja', 'b'),
         _q(lessonId, '¿Cómo se dice "Pie" en Ngigua?',
             'raa', 'neje', 'ruthea', 'thusin', 'c'),
-        _q(lessonId, '"chinthjón" en Ngigua es:',
+        _q(lessonId, '"chinthjon" en Ngigua es:',
             'Boca', 'Ojo', 'Nariz', 'Cuello', 'c'),
         _q(lessonId, '¿Qué es "thusin" en Ngigua?',
             'Cabeza', 'Mano', 'Pie', 'Cuello', 'd'),
         _q(lessonId, '¿Cómo se dice "Boca" en Ngigua?',
-            'jaa', 'jmakón', 'rua', 'thusin', 'c'),
+            'jaa', 'jmakon', 'rua', 'thusin', 'c'),
         _q(lessonId, '"ruthea" en Ngigua es:',
             'Mano', 'Pie', 'Nariz', 'Cuello', 'b'),
         _q(lessonId, '¿Con qué parte del cuerpo ("raa") lavas?',
@@ -623,7 +623,7 @@ class DatabaseSeeder {
         _q(lessonId, '"nua" en Ngigua significa:',
             'Tamal', 'Tortilla', 'Maíz / Milpa', 'Papa', 'c'),
         _q(lessonId, '¿Cuál es el alimento de fiesta en Ngigua?',
-            'nio', 'thukma', 'niunthaon', 'ndaxra', 'c'),
+            'nio', 'thukma', 'niunthao', 'ndaxra', 'c'),
         _q(lessonId, '"thukma" en Ngigua es:',
             'Tortilla', 'Papa', 'Fruta', 'Maíz', 'b'),
         _q(lessonId, '¿Qué significa "ndaxra"?',
@@ -632,12 +632,12 @@ class DatabaseSeeder {
             'Comida', 'Dinero / Moneda', 'Fruta', 'Tortilla', 'b'),
         _q(lessonId, '¿Cómo se dice "Fruta" en Ngigua?',
             'nio', 'nua', 'thukma', 'thuchmoin', 'd'),
-        _q(lessonId, '"niunthaon" en Ngigua es:',
+        _q(lessonId, '"niunthao" en Ngigua es:',
             'Papa', 'Tortilla', 'Tamal', 'Fruta', 'c'),
         _q(lessonId, '¿Cuál es la base de la alimentación en San Marcos Tlacoyalco?',
             'thukma', 'nio y nua', 'tumi', 'thuchmoin', 'b'),
         _q(lessonId, '¿Cuál NO es un alimento en esta lección?',
-            'nio', 'nua', 'niunthaon', 'chrin', 'd'),
+            'nio', 'nua', 'niunthao', 'chrin', 'd'),
       ];
 
   static List<Map<String, dynamic>> _q8(int lessonId) => [
@@ -775,14 +775,14 @@ class DatabaseSeeder {
 
   static List<Map<String, dynamic>> _q2extra(int lessonId) => [
         _q(lessonId, '¿Qué número viene después de "nii" (3) en Ngigua?',
-            'nao', 'jngo', 'noo', 'yoo', 'c'),
-        _q(lessonId, '"nao" en Ngigua son los dedos de la mano. ¿Cuántos son?',
+            'naꞌo', 'naa', 'noo', 'yoo', 'c'),
+        _q(lessonId, '"naꞌo" en Ngigua son los dedos de la mano. ¿Cuántos son?',
             'Tres', 'Cuatro', 'Cinco', 'Dos', 'c'),
         _q(lessonId, '¿Cómo se dice "Dos" en Ngigua?',
-            'noo', 'nii', 'yoo', 'jngo', 'c'),
+            'noo', 'nii', 'yoo', 'naa', 'c'),
         _q(lessonId, 'La secuencia correcta del 1 al 5 en Ngigua es:',
-            'yoo, jngo, noo, nii, nao', 'jngo, yoo, nii, noo, nao',
-            'nao, noo, nii, yoo, jngo', 'nii, yoo, jngo, nao, noo', 'b'),
+            'yoo, naa, noo, nii, naꞌo', 'naa, yoo, nii, noo, naꞌo',
+            'naꞌo, noo, nii, yoo, naa', 'nii, yoo, naa, naꞌo, noo', 'b'),
         _q(lessonId, 'El sistema numeral del Ngigua tiene base:',
             'Decimal (base 10)', 'Duodecimal (base 12)', 'Vigesimal (base 20)', 'Quinaria (base 5)', 'c'),
       ];
@@ -828,11 +828,11 @@ class DatabaseSeeder {
 
   static List<Map<String, dynamic>> _q6extra(int lessonId) => [
         _q(lessonId, '¿Con qué parte del cuerpo ("neje") pruebas la comida?',
-            'jaa (cabeza)', 'jmakón (ojo)', 'neje (lengua)', 'raa (mano)', 'c'),
+            'jaa (cabeza)', 'jmakon (ojo)', 'neje (lengua)', 'raa (mano)', 'c'),
         _q(lessonId, '"jaa" en Ngigua es la parte con la que piensas:',
             'Las manos', 'Los pies', 'La cabeza', 'La nariz', 'c'),
         _q(lessonId, '¿Cuál parte del cuerpo en Ngigua sirve para ver?',
-            'neje', 'jmakón', 'chinthjón', 'thusin', 'b'),
+            'neje', 'jmakon', 'chinthjon', 'thusin', 'b'),
         _q(lessonId, '¿Cómo se dice "Cuello" en Ngigua?',
             'raa', 'ruthea', 'neje', 'thusin', 'd'),
         _q(lessonId, '¿Cuál NO es una parte del cuerpo en esta lección?',
@@ -843,13 +843,13 @@ class DatabaseSeeder {
         _q(lessonId, '"Nua" en Ngigua es la base de la alimentación. ¿Qué es?',
             'La sal', 'El maíz', 'El tamal', 'El dinero', 'b'),
         _q(lessonId, '¿Qué alimento se hace en el comal en Ngigua?',
-            'thukma', 'nio', 'niunthaon', 'tumi', 'b'),
+            'thukma', 'nio', 'niunthao', 'tumi', 'b'),
         _q(lessonId, '¿Cuál NO es un alimento en esta lección?',
-            'nio', 'nua', 'niunthaon', 'xro', 'd'),
+            'nio', 'nua', 'niunthao', 'xro', 'd'),
         _q(lessonId, '¿Con qué ("tumi") se compra comida en Ngigua?',
             'Con maíz', 'Con tortillas', 'Con dinero', 'Con fruta', 'c'),
         _q(lessonId, '¿Qué alimento es el especial de las fiestas?',
-            'thukma', 'ndaxra', 'niunthaon', 'nio', 'c'),
+            'thukma', 'ndaxra', 'niunthao', 'nio', 'c'),
       ];
 
   static List<Map<String, dynamic>> _q8extra(int lessonId) => [

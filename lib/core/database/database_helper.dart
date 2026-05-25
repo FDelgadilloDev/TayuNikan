@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 /// Todas las lecciones, palabras, progreso y grabaciones se guardan aquí.
 class DatabaseHelper {
   static const String _databaseName = 'tayunikan.db';
-  static const int _databaseVersion = 3;
+  static const int _databaseVersion = 4;
 
   // Singleton
   static DatabaseHelper? _instance;
@@ -130,6 +130,16 @@ class DatabaseHelper {
     if (oldVersion < 3) {
       // v3: Limpiar contenido para re-seed con audio_path y preguntas nuevas.
       // El progreso del usuario se pierde pero el contenido queda actualizado.
+      await db.execute('DELETE FROM quiz_questions');
+      await db.execute('DELETE FROM user_progress');
+      await db.execute('DELETE FROM pronunciation_attempts');
+      await db.execute('DELETE FROM words');
+      await db.execute('DELETE FROM lessons');
+    }
+    if (oldVersion < 4) {
+      // v4: Re-seed con vocabulario corregido del diccionario Ngigua oficial:
+      // naa (uno), naꞌo (cinco), niunthao (tamal), jmakon (ojo), chinthjon (nariz).
+      // Tambien corrige rutas de imagenes renombradas.
       await db.execute('DELETE FROM quiz_questions');
       await db.execute('DELETE FROM user_progress');
       await db.execute('DELETE FROM pronunciation_attempts');
