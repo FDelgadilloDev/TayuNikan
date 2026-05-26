@@ -6,11 +6,6 @@ on:
   # También al hacer push a main (opcional, comenta si prefieres solo manual)
   push:
     branches: [ main ]
-    paths:
-      - 'lib/**'
-      - 'assets/**'
-      - 'pubspec.yaml'
-      - 'ios/**'
 
 jobs:
   build-ios:
