@@ -1,20 +1,18 @@
 name: Build iOS IPA
 
 on:
-  # Se ejecuta manualmente desde GitHub → Actions → "Run workflow"
   workflow_dispatch:
-  # También al hacer push a main (opcional, comenta si prefieres solo manual)
   push:
     branches: [ main ]
 
 jobs:
   build-ios:
     name: Build unsigned IPA
-    runs-on: macos-latest        # Mac virtual gratis en GitHub Actions
+    runs-on: macos-latest
 
     steps:
-      # 1. Descargar el código
-      - name: Checkout código
+      # 1. Descargar código
+      - name: Checkout
         uses: actions/checkout@v4
 
       # 2. Instalar Flutter
@@ -25,42 +23,45 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # 3. Obtener dependencias
+      # 3. Dependencias Dart
       - name: flutter pub get
         run: flutter pub get
 
-      # 4. Compilar iOS sin firma de código (no requiere Apple Developer)
+      # 4. Instalar CocoaPods (requerido antes del build iOS)
+      - name: pod install
+        run: |
+          cd ios
+          pod install --repo-update
+        env:
+          LANG: en_US.UTF-8
+
+      # 5. Build iOS sin firma
       - name: flutter build ios --no-codesign
         run: flutter build ios --release --no-codesign
+        env:
+          LANG: en_US.UTF-8
 
-      # 5. Empaquetar como IPA (unsigned — se firma con Sideloadly en Windows)
+      # 6. Empaquetar como IPA
       - name: Crear IPA
         run: |
           cd build/ios/iphoneos
           mkdir -p Payload
           cp -r Runner.app Payload/
           zip -r TayuNikan-unsigned.ipa Payload/
-          echo "IPA creado: $(ls -lh TayuNikan-unsigned.ipa)"
+          ls -lh TayuNikan-unsigned.ipa
 
-      # 6. Subir IPA como artefacto descargable (disponible 30 días)
-      - name: Subir IPA como artefacto
+      # 7. Subir artefacto (disponible 30 días)
+      - name: Subir IPA
         uses: actions/upload-artifact@v4
         with:
           name: TayuNikan-iOS-unsigned
           path: build/ios/iphoneos/TayuNikan-unsigned.ipa
           retention-days: 30
 
-      # 7. Mostrar resumen
-      - name: Resumen del build
+      # 8. Resumen
+      - name: Resumen
         run: |
-          echo "## ✅ Build iOS completado" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ IPA listo para descargar" >> $GITHUB_STEP_SUMMARY
+          echo "Descarga el artefacto **TayuNikan-iOS-unsigned** e instálalo con Sideloadly en tu iPad." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Descarga el IPA:" >> $GITHUB_STEP_SUMMARY
-          echo "1. Ve a **Actions → este workflow → Artifacts**" >> $GITHUB_STEP_SUMMARY
-          echo "2. Descarga **TayuNikan-iOS-unsigned.zip**" >> $GITHUB_STEP_SUMMARY
-          echo "3. Extrae el archivo **TayuNikan-unsigned.ipa**" >> $GITHUB_STEP_SUMMARY
-          echo "4. Instálalo en tu iPad con **Sideloadly** (Windows)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Tamaño del IPA:" >> $GITHUB_STEP_SUMMARY
           ls -lh build/ios/iphoneos/TayuNikan-unsigned.ipa >> $GITHUB_STEP_SUMMARY
-# Build: Mon May 25 13:33:11 HMM 2026
